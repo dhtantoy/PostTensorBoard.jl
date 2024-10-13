@@ -15,6 +15,7 @@ export output_with_keys
 export post_tb_data
 export domain2mp4
 export get_imgs
+export get_mat
 
 struct DFImage
     subpath::String
@@ -144,6 +145,11 @@ end
 function get_imgs(run_path, Ids, tag= "domain/χ")
     df_img = get_run_data(run_path; tags=tag)
     return df_img[Symbol(tag)].values[Ids]
+end
+
+function get_mat(args...)
+    r = get_imgs(args...)
+    return convert(Array{Float64, 2}, r)
 end
 
 Plots.plot!(::Nothing, args...; kwargs...) = nothing

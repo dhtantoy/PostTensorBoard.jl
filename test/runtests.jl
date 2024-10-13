@@ -14,4 +14,4 @@ domain2mp4(tb_path, runs)
 
 # ---- output domain ----
 run_path = "/export/home/tandh/JlProjects/HeatFlowTopOpt/data/2024-10-12T01_12_01/tb/run_7" 
-r = get_imgs(run_path, 3)
+r = get_mat(run_path, 3)
