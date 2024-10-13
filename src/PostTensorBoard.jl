@@ -14,6 +14,7 @@ import ProtoBuf
 export output_with_keys
 export post_tb_data
 export domain2mp4
+export get_imgs
 
 struct DFImage
     subpath::String
@@ -122,8 +123,7 @@ function domain2mp4(tb_path, runs= nothing; fr::Int= 5, tag= "domain/χ")
 
     for run in runs
         run_path = joinpath(tb_path, run)
-        df_img = get_run_data(run_path; tags=tag)
-        img_list = df_img[Symbol(tag)].values
+        img_list = get_imgs(run_path, :, tag)
 
         file = run_path*".mp4"
         infile = run_path*"_.mp4"
@@ -139,6 +139,11 @@ function domain2mp4(tb_path, runs= nothing; fr::Int= 5, tag= "domain/χ")
         rm(infile)
     end
     return nothing
+end
+
+function get_imgs(run_path, Ids, tag= "domain/χ")
+    df_img = get_run_data(run_path; tags=tag)
+    return df_img[Symbol(tag)].values[Ids]
 end
 
 Plots.plot!(::Nothing, args...; kwargs...) = nothing
