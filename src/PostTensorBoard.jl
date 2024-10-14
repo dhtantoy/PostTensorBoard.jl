@@ -149,7 +149,7 @@ end
 
 function get_mat(args...)
     r = get_imgs(args...)
-    return convert(Array{Float64, 2}, r)
+    return rotl90(convert(Array{Float64, 2}, r))
 end
 
 Plots.plot!(::Nothing, args...; kwargs...) = nothing
