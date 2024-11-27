@@ -85,10 +85,7 @@ function run_with_configs(f, vec_configs, comments; prefix=".", max_it= 100)
     err_prefix = joinpath(path, "errors")
     make_path(err_prefix, 0o753)
 
-    pmap(eachindex(appended_config_arr)) do i
-        multi_config = Dict{String, Any}(appended_config_arr[i])
-        config = merge(base_config, multi_config)
-
+    function singlerun(config, i, multi_config)
         tb_file_prefix = joinpath(tb_path_prefix, "run_$i")
         tb_lg = TBLogger(tb_file_prefix, tb_overwrite, min_level=Logging.Info)
 
@@ -121,6 +118,16 @@ function run_with_configs(f, vec_configs, comments; prefix=".", max_it= 100)
             close(tb_lg)
             savepvd(vtk_file_pvd)
             nothing
+        end
+    end
+
+    if isempty(appended_config_arr)
+        singlerun(base_config, 1, [])
+    else
+        pmap(eachindex(appended_config_arr)) do i
+            multi_config = Dict{String, Any}(appended_config_arr[i])
+            config = merge(base_config, multi_config)
+            singlerun(config, i, multi_config)
         end
     end
     return nothing
